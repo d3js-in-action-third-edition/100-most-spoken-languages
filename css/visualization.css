@@ -13,3 +13,63 @@
   line-height: 1.1;
   text-align: center;
 }
+
+/* Legend */
+#legend-families ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+#legend-families li {
+  display: flex;
+  margin: 5px 10px;
+}
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+/* Interactions */
+#info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+#instructions {
+  padding: 15px 20px;
+  border: 1px solid #272626;
+  border-radius: 5px;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+#info {
+  max-height: 200px;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+#info.hidden,
+#instructions.hidden {
+  max-height: 0;
+  opacity: 0;
+}
+#instructions.hidden {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: transparent;
+}
+.info-language {
+  margin-bottom: 6px;
+  font-size: 2rem;
+  font-weight: 500;
+  border-bottom: 1px solid #272626;
+}
+#info .label {
+  font-weight: 500;
+}

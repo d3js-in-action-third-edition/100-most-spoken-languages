@@ -3,24 +3,6 @@ const drawCirclePack = (root) => {
   // Dimensions
   const width = 800;
   const height = 800;
-  const margin = {top: 20, right: 20, bottom: 20, left: 20};
-  const innerWidth = width - margin.right - margin.left;
-  const innerHeight = height - margin.top - margin.bottom;
-
-  // Scales
-  const radialScale = d3.scaleRadial()
-    .domain([0, 400000000])
-    .range([0, 100]);
-
-  const colorScale = d3.scaleOrdinal()
-    .domain(languageFamilies.map(d => d.label))
-    .range(languageFamilies.map(d => d.color));
-
-  // Compute the size of the circles
-  // root.count(); // If all circles same size
-  root.sum(d => radialScale(d.total_speakers)); // Show how deformed if no scale
-  // root.sum(d => d.native_speakers === 0 ? 3 : radialScale(d.native_speakers));
-  // root.sum(d => d.native_speakers === 0 ? 6 : d.native_speakers);
 
   // Compute labels and titles.
   const descendants = root.descendants();
@@ -30,9 +12,29 @@ const drawCirclePack = (root) => {
 
   root.sort((a, b) => d3.descending(a.value, b.value)); // Does that make a difference?
 
+
+  // Scales
+  const maxSpeakers = d3.max(leaves, d => d.data.total_speakers);
+  console.log("maxSpeakers", maxSpeakers)
+  const radialScale = d3.scaleRadial()
+    .domain([0, maxSpeakers])
+    .range([0, 79]);
+
+  const colorScale = d3.scaleOrdinal()
+    .domain(languageFamilies.map(d => d.label))
+    .range(languageFamilies.map(d => d.color));
+
+
+  // Compute the size of the circles
+  // root.count(); // If all circles same size
+  // root.sum(d => radialScale(d.total_speakers)); // Show how deformed if no scale
+  root.sum(d => d.total_speakers); // Show how deformed if no scale
+  // root.sum(d => d.native_speakers === 0 ? 3 : radialScale(d.native_speakers));
+  // root.sum(d => d.native_speakers === 0 ? 6 : d.native_speakers);
+
   // Compute the layout
   const packLayoutGenerator = d3.pack()
-    .size([innerWidth, innerHeight])
+    .size([width, height])
     .padding(3); // Separation between circles
   const pack = packLayoutGenerator(root);
 
@@ -50,7 +52,8 @@ const drawCirclePack = (root) => {
     .join("circle")
       .attr("class", d => {
         console.log(d);
-        return `pack-circle pack-circle-${d.data.child.replaceAll(" ", "-")}`;
+        const isLanguage = d.depth === 3 ? "language" : "";
+        return `pack-circle pack-circle-${d.data.child.replaceAll(" ", "-")} ${isLanguage}`;
       })
       .attr("cx", d => d.x)
       .attr("cy", d => d.y)
@@ -78,13 +81,121 @@ const drawCirclePack = (root) => {
     .data(leaves.filter(leave => leave.r >= minRadius))
     .join("foreignObject")
       .attr("class", "leaf-label-object")
-      .attr("width", d => 2.2 * d.r)
-      .attr("height", d => 2.2 * d.r)
-      .attr("x", d => d.x - 1.1 * d.r)
-      .attr("y", d => d.y - 1.1 * d.r)
+      .attr("width", d => 2 * d.r)
+      .attr("height", 40)
+      .attr("x", d => d.x - d.r)
+      .attr("y", d => d.y - 20)
     .append("xhtml:div")
       .attr("class", "leaf-label")
       .text(d => d.data.child);
 
+
+
+  // Append legend
+  const legendFamilies = d3.select("#legend-families")
+    .append("ul")
+    .selectAll(".legend-family")
+    .data(languageFamilies)
+    .join("li");
+  legendFamilies
+    .append("span")
+      .attr("class", "legend-color")
+      .style("background-color", d => colorScale(d.label));
+  legendFamilies
+    .append("span")
+      .attr("class", "legend-label")
+      .text(d => d.label);
+
+  const speakersMax = 1000000000;
+  const speakersMedium = 100000000;
+  const speakersMin = 10000000;
+  const legendSpeakers = d3.select("#legend-speakers")
+    .append("svg")
+      .attr("width", 260)
+      .attr("height", 160)
+    .append("g")
+      .attr("transform", "translate(1, 10)");
+  const legendCircles = legendSpeakers 
+    .append("g")
+      .attr("fill", "transparent")
+      .attr("stroke", "#272626");
+  legendCircles
+    .append("circle")
+      .attr("cx", radialScale(speakersMax))
+      .attr("cy", radialScale(speakersMax))
+      .attr("r", radialScale(speakersMax));
+  legendCircles
+    .append("circle")
+      .attr("cx", radialScale(speakersMax))
+      .attr("cy", 2*radialScale(speakersMax) - radialScale(speakersMedium))
+      .attr("r", radialScale(speakersMedium));
+  legendCircles
+    .append("circle")
+      .attr("cx", radialScale(speakersMax))
+      .attr("cy", 2*radialScale(speakersMax) - radialScale(speakersMin))
+      .attr("r", radialScale(speakersMin));
+
+  const linesLength = 100;
+  const legendLines = legendSpeakers
+    .append("g")
+      .attr("stroke", "#272626")
+      .attr("stroke-dasharray", "6 4");
+  legendLines
+    .append("line")
+      .attr("x1", radialScale(speakersMax))
+      .attr("y1", 0)
+      .attr("x2", radialScale(speakersMax) + linesLength)
+      .attr("y2", 0);
+  legendLines
+    .append("line")
+      .attr("x1", radialScale(speakersMax))
+      .attr("y1", 2*radialScale(speakersMax) - 2*radialScale(speakersMedium))
+      .attr("x2", radialScale(speakersMax) + linesLength)
+      .attr("y2", 02*radialScale(speakersMax) - 2*radialScale(speakersMedium));
+  legendLines
+    .append("line")
+      .attr("x1", radialScale(speakersMax))
+      .attr("y1", 2*radialScale(speakersMax) - 2*radialScale(speakersMin))
+      .attr("x2", radialScale(speakersMax) + linesLength)
+      .attr("y2", 02*radialScale(speakersMax) - 2*radialScale(speakersMin));
+
+  const labels = legendSpeakers
+    .append("g")
+      .attr("fill", "#272626")
+      .attr("dominant-baseline", "middle");
+  labels
+    .append("text")
+      .attr("x", radialScale(speakersMax) + linesLength + 5)
+      .attr("y", 0)
+      .text(d3.format(".1s")(speakersMax));
+  labels
+    .append("text")
+      .attr("x", radialScale(speakersMax) + linesLength + 5)
+      .attr("y", 2*radialScale(speakersMax) - 2*radialScale(speakersMedium))
+      .text(d3.format(".1s")(speakersMedium));
+  labels
+    .append("text")
+      .attr("x", radialScale(speakersMax) + linesLength + 5)
+      .attr("y", 2*radialScale(speakersMax) - 2*radialScale(speakersMin))
+      .text(d3.format(".1s")(speakersMin));
+
+
+  // Interactions
+  d3.selectAll(".language, foreignObject")
+    .on("mouseenter", (e, d) => {
+      console.log(d)
+      d3.select(".info-language").text(d.data.child);
+      d3.select(".info-branch .information").text(d.data.parent);
+      d3.select(".info-family .information").text(d.parent.data.parent);
+      d3.select(".info-total-speakers .information").text(d3.format(".3s")(d.data.total_speakers));
+      d3.select(".info-native-speakers .information").text(d3.format(".3s")(d.data.native_speakers));
+
+      d3.select("#instructions").classed("hidden", true);
+      d3.select("#info").classed("hidden", false);
+    })
+    .on("mouseleave", () => {
+      d3.select("#instructions").classed("hidden", false);
+      d3.select("#info").classed("hidden", true);
+    });
 
 };

@@ -13,8 +13,44 @@
 		<h1>100 Most Spoken Languages</h1>
 		<section>
 			<h2>Packed Circle Chart</h2>
-			<div class="container-small">
-				<div id="circle-pack"></div>
+			<div class="row">
+				<div class="col col-8">
+					<h3>Language families</h4>
+					<div id="legend-families"></div>
+				</div>
+				<div class="col col-4">
+					<h3>Total number of speakers</h4>
+					<div id="legend-speakers"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col col-9">
+					<div id="circle-pack"></div>
+				</div>
+				<div class="col col-3">
+					<div id="info-container">
+						<div id="instructions">Pass your mouse over a language to reveal additional information.</div>
+						<div id="info" class="hidden">
+							<div class="info-language"></div>
+							<div class="info-branch">
+								<span class="label">Branch: </span>
+								<span class="information"></span>
+							</div>
+							<div class="info-family">
+								<span class="label">Family: </span>
+								<span class="information"></span>
+							</div>
+							<div class="info-total-speakers">
+								<span class="label">Total speakers: </span>
+								<span class="information"></span>
+							</div>
+							<div class="info-native-speakers">
+								<span class="label">Native speakers: </span>
+								<span class="information"></span>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 		
