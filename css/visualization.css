@@ -1,0 +1,15 @@
+/* Responsive container of the svg element */
+.responsive-svg-container {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.leaf-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  text-align: center;
+}
