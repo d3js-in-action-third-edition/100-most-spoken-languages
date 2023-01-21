@@ -1,36 +1,12 @@
-const drawCirclePack = (root) => {
+const drawCirclePack = (root, descendants, leaves) => {
 
   // Dimensions
   const width = 800;
   const height = 800;
 
-  // Compute labels and titles.
-  const descendants = root.descendants();
-  const leaves = descendants.filter(d => !d.children);
-  console.log("descendants", descendants);
-  console.log("leaves", leaves);
-
-  root.sort((a, b) => d3.descending(a.value, b.value)); // Does that make a difference?
-
-
-  // Scales
-  const maxSpeakers = d3.max(leaves, d => d.data.total_speakers);
-  console.log("maxSpeakers", maxSpeakers)
-  const radialScale = d3.scaleRadial()
-    .domain([0, maxSpeakers])
-    .range([0, 79]);
-
-  const colorScale = d3.scaleOrdinal()
-    .domain(languageFamilies.map(d => d.label))
-    .range(languageFamilies.map(d => d.color));
-
 
   // Compute the size of the circles
-  // root.count(); // If all circles same size
-  // root.sum(d => radialScale(d.total_speakers)); // Show how deformed if no scale
-  root.sum(d => d.total_speakers); // Show how deformed if no scale
-  // root.sum(d => d.native_speakers === 0 ? 3 : radialScale(d.native_speakers));
-  // root.sum(d => d.native_speakers === 0 ? 6 : d.native_speakers);
+  root.sum(d => d.total_speakers);
 
   // Compute the layout
   const packLayoutGenerator = d3.pack()
@@ -51,7 +27,7 @@ const drawCirclePack = (root) => {
     .data(descendants)
     .join("circle")
       .attr("class", d => {
-        console.log(d);
+        // console.log(d);
         const isLanguage = d.depth === 3 ? "language" : "";
         return `pack-circle pack-circle-${d.data.child.replaceAll(" ", "-")} ${isLanguage}`;
       })

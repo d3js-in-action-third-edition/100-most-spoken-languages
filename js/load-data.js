@@ -14,6 +14,16 @@ Promise.all([
   const root = stratify(flatData);
   console.log("root data", root.data);
 
+  const descendants = root.descendants();
+  const leaves = descendants.filter(d => !d.children);
+  console.log("descendants", descendants);
+  console.log("leaves", leaves);
+
+  root.sort((a, b) => d3.descending(a.value, b.value)); // Does that make a difference?
+
   // Call functions that will draw the charts
-  drawCirclePack(root);
+  setScales(leaves);
+  drawCirclePack(root, descendants, leaves);
+  drawTree(root, descendants);
+  drawRadialTree(root, descendants);
 });

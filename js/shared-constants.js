@@ -11,3 +11,17 @@ const languageFamilies = [
   { label: "Kra-Dai", color: "#36311F" },
   { label: "Uralic", color: "#B59930" },
 ];
+
+// Scales
+const radialScale = d3.scaleRadial();
+
+const colorScale = d3.scaleOrdinal()
+  .domain(languageFamilies.map(d => d.label))
+  .range(languageFamilies.map(d => d.color));
+
+const setScales = (leaves) => {
+  const maxSpeakers = d3.max(leaves, d => d.data.total_speakers);
+  radialScale
+    .domain([0, maxSpeakers])
+    .range([0, 79]);
+};
