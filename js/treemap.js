@@ -1,7 +1,5 @@
 const drawTreeMap = (root, leaves) => {
 
-  console.log("root", root);
-
   // Dimensions
   const width = 850;
   const height = 600;

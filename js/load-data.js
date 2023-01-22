@@ -27,4 +27,5 @@ Promise.all([
   drawTree(root, descendants);
   drawRadialTree(root, descendants);
   drawTreeMap(root, leaves);
+  drawIcicle(root, descendants);
 });
