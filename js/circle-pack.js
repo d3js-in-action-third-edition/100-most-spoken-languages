@@ -4,7 +4,6 @@ const drawCirclePack = (root, descendants, leaves) => {
   const width = 800;
   const height = 800;
 
-
   // Compute the size of the circles
   root.sum(d => d.total_speakers);
 
@@ -160,11 +159,11 @@ const drawCirclePack = (root, descendants, leaves) => {
   d3.selectAll(".language, foreignObject")
     .on("mouseenter", (e, d) => {
       console.log(d)
-      d3.select(".info-language").text(d.data.child);
-      d3.select(".info-branch .information").text(d.data.parent);
-      d3.select(".info-family .information").text(d.parent.data.parent);
-      d3.select(".info-total-speakers .information").text(d3.format(".3s")(d.data.total_speakers));
-      d3.select(".info-native-speakers .information").text(d3.format(".3s")(d.data.native_speakers));
+      d3.select("#info .info-language").text(d.data.child);
+      d3.select("#info .info-branch .information").text(d.data.parent);
+      d3.select("#info .info-family .information").text(d.parent.data.parent);
+      d3.select("#info .info-total-speakers .information").text(d3.format(".3s")(d.data.total_speakers));
+      d3.select("#info .info-native-speakers .information").text(d3.format(".3s")(d.data.native_speakers));
 
       d3.select("#instructions").classed("hidden", true);
       d3.select("#info").classed("hidden", false);

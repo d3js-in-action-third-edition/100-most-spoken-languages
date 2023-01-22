@@ -19,11 +19,12 @@ Promise.all([
   console.log("descendants", descendants);
   console.log("leaves", leaves);
 
-  root.sort((a, b) => d3.descending(a.value, b.value)); // Does that make a difference?
+  // root.sort((a, b) => d3.descending(a.value, b.value)); // Does that make a difference?
 
   // Call functions that will draw the charts
   setScales(leaves);
   drawCirclePack(root, descendants, leaves);
   drawTree(root, descendants);
   drawRadialTree(root, descendants);
+  drawTreeMap(root, leaves);
 });

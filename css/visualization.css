@@ -40,7 +40,8 @@
   justify-content: center;
   height: 100%;
 }
-#instructions {
+#instructions,
+#instructions-treemap {
   padding: 15px 20px;
   border: 1px solid #272626;
   border-radius: 5px;
@@ -48,18 +49,22 @@
   opacity: 1;
   transition: opacity 200ms ease;
 }
-#info {
+#info,
+#info-treemap {
   max-height: 200px;
   overflow: hidden;
   opacity: 1;
   transition: opacity 200ms ease;
 }
 #info.hidden,
-#instructions.hidden {
+#instructions.hidden,
+#info-treemap.hidden,
+#instructions-treemap.hidden {
   max-height: 0;
   opacity: 0;
 }
-#instructions.hidden {
+#instructions.hidden,
+#instructions-treemap.hidden {
   padding-top: 0;
   padding-bottom: 0;
   border-color: transparent;
@@ -70,6 +75,7 @@
   font-weight: 500;
   border-bottom: 1px solid #272626;
 }
-#info .label {
+#info .label,
+#info-treemap .label {
   font-weight: 500;
 }
