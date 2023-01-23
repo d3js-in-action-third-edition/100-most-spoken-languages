@@ -12,12 +12,27 @@ Promise.all([
     .id(d => d.child)
     .parentId(d => d.parent);
   const root = stratify(flatData);
-  console.log("root data", root.data);
+  console.log("root", root);
 
   const descendants = root.descendants();
   const leaves = descendants.filter(d => !d.children);
   console.log("descendants", descendants);
   console.log("leaves", leaves);
+
+  const jsonObject = { name: "Languages", children: [] };
+  descendants.filter(d => d.depth === 1).forEach(d => {
+    const family = { name: d.data.child, children: [] };
+    d.children.forEach(b => {
+      const branch = { name: b.data.child, children: [] };
+      b.children.forEach(l => {
+        const lang = { name: l.data.child, total_speakers: l.data.total_speakers, native_speakers: l.data.native_speakers }
+        branch.children.push(lang)
+      })
+      family.children.push(branch);
+    })
+    jsonObject.children.push(family);
+  })
+  console.log("json", jsonObject)
 
   // root.sort((a, b) => d3.descending(a.value, b.value)); // Does that make a difference?
 
