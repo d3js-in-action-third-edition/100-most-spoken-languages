@@ -3,20 +3,25 @@ const drawCirclePack = (root, descendants, leaves) => {
   // Dimensions
   const width = 800;
   const height = 800;
+  const margin = { top: 1, right: 1, bottom: 1, left: 1 };
+  const innerWidth = width - margin.right - margin.left;
+  const innerHeight = height - margin.top - margin.bottom;
 
   // Compute the size of the circles
   root.sum(d => d.total_speakers);
 
   // Compute the layout
   const packLayoutGenerator = d3.pack()
-    .size([width, height])
+    .size([innerWidth, innerHeight])
     .padding(3); // Separation between circles
   const pack = packLayoutGenerator(root);
 
   // Append SVG container
   const svg = d3.select("#circle-pack")
     .append("svg")
-      .attr("viewBox", `0 0 ${width} ${height}`);
+      .attr("viewBox", `0 0 ${width} ${height}`)
+    .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
   // Append circles
   const circles = svg
@@ -45,7 +50,7 @@ const drawCirclePack = (root, descendants, leaves) => {
             return "white";
         };
       })
-      .attr("stroke", "none");
+      .attr("stroke", d => d.depth === 0 ? "grey" : "none");
 
   // Append labels
   const minRadius = 22;

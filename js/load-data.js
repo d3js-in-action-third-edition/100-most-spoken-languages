@@ -44,3 +44,18 @@ Promise.all([
   drawTreeMap(root, leaves);
   drawIcicle(root, descendants);
 });
+
+d3.json("./data/hierarchical-data.json").then(data => {
+  console.log(data);
+
+  const root = d3.hierarchy(data);
+  console.log("root", root);
+
+  const descendants = root.descendants();
+  const leaves = descendants.filter(d => !d.children);
+  console.log("descendants", descendants);
+  console.log("leaves", leaves);
+
+//  Could also build the charts from here
+
+});
