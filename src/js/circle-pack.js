@@ -40,6 +40,8 @@ export const drawCirclePack = (root, descendants, leaves) => {
       .attr("r", d => d.r)
       .attr("fill", d => {
         switch (d.depth) {
+          case 0:
+            return "transparent";
           case 1:
             return colorScale(d.id);
           case 2:
@@ -68,7 +70,7 @@ export const drawCirclePack = (root, descendants, leaves) => {
   // Interactions
   selectAll(".pack-circle-depth-3, foreignObject")
     .on("mouseenter", (e, d) => {
-      console.log(d)
+      // console.log(d)
       select("#info .info-language").text(d.id);
       select("#info .info-branch .information").text(d.parent.id);
       select("#info .info-family .information").text(d.parent.data.parent);
