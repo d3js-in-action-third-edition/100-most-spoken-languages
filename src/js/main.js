@@ -3,6 +3,7 @@ import { CSVToHierarchy, JSONToHierarchy } from "./hierarchy.js";
 import { drawCirclePack } from "./circle-pack.js";
 import { drawTree } from "./tree.js";
 import { createLegend } from "./legend.js";
+import { drawTreemap } from "./treemap.js";
 
 // Load and format the hierarchical data
 const flatData = loadCSVData();
@@ -19,3 +20,7 @@ drawTree(root, descendants, leaves);
 
 // Create legend
 createLegend();
+
+// Draw the treemap
+drawTreemap(root, leaves);
+console.log("hey")
